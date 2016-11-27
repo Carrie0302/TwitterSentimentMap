@@ -1,0 +1,8 @@
+IndicoIo==0.16.1
+matplotlib==1.5.1
+memory_profiler==0.41
+numpy==1.11.1
+pandas==0.18.1
+folium==0.2.1
+Shapely==1.6a2
+tweepy==3.5.0
