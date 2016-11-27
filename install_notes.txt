@@ -1,0 +1,11 @@
+''' RECOMMEND USING CONDA VENV EG: 
+> conda create --name twittergeo
+> source activate twittergeo
+or on windows
+> activate twittergeo
+
+try:
+     import shapely
+except ImportError:
+	import os
+	os.system("conda install -c  conda-forge shapely=1.5.17")

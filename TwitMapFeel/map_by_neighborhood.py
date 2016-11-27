@@ -16,8 +16,9 @@ start = time.time()
 pd.set_option('display.max_colwidth', 500)
 pd.set_option('display.max_rows', 10)  #change this to the number of rows in the display
 
-neighborhoods_geo = r"C:\Users\Carrie\Documents\Python Scripts\Twitter\neighborhoodsSeattlegeojson.json"
-sentimentbyN= pd.read_excel(r"C:\Users\Carrie\Documents\Python Scripts\Twitter\SentimentbyNeighborhood_10_24_2016.xlsx")
+neighborhoods_geo = r"neighborhoodsSeattlegeojson.json"
+
+sentimentbyN= pd.read_excel(r"SentimentbyNeighborhood_10_24_2016.xlsx")
 sentimentbyN = sentimentbyN[['neighborhood', 'sentiment']]    #= sentimentbyN.loc[ sentimentbyN['neighborhood'] == None]
 
 NwithData = sentimentbyN['neighborhood'].tolist()
