@@ -32,7 +32,7 @@ def parseJson():
             tweets_data.append(tweet)
         except:
             continue
-    print( "Number of Tweets to be Processed: {0}".format( len(tweets_data) ))
+    print(( "Number of Tweets to be Processed: {0}".format( len(tweets_data) )))
     return tweets_data
 
 tweets_data = parseJson()
@@ -72,4 +72,4 @@ WeekLongJson.to_json(outputfile)
 
 #Look at elapsed time of program
 end = time.time()
-print("\n" + "elapsed time:" + str(end - start))
+print(("\n" + "elapsed time:" + str(end - start)))

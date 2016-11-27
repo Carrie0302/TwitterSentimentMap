@@ -21,7 +21,7 @@ sentimentbyN= pd.read_excel(r"C:\Users\Carrie\Documents\Python Scripts\Twitter\S
 sentimentbyN = sentimentbyN[['neighborhood', 'sentiment']]    #= sentimentbyN.loc[ sentimentbyN['neighborhood'] == None]
 
 NwithData = sentimentbyN['neighborhood'].tolist()
-print len(  NwithData )
+print(len(  NwithData ))
 
 checkDataAvailable = []
 geoN = pd.read_json(neighborhoods_geo)
@@ -36,7 +36,7 @@ for f in feature:
         print (check)
         sentimentbyN.loc[i] = [check, 0 ]
         i+=1
-print(len(sentimentbyN))
+print((len(sentimentbyN)))
 
 
 #Map neighborhoods
@@ -57,6 +57,6 @@ NeighborhoodMap()
 
  
 end = time.time()
-print("\n" + "elapsed time:" + str(end - start))
+print(("\n" + "elapsed time:" + str(end - start)))
 
     

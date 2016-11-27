@@ -20,11 +20,11 @@ consumer_secret = "WPAHRDDRdpkdaSiydvfOLXSTp06mArnPEE8Z7Pu5I8IOQcx934"
 class StdOutListener(StreamListener):
 
     def on_data(self, data):
-        print data
+        print(data)
         return True
 
     def on_error(self, status):
-        print status
+        print(status)
 
 
 if __name__ == '__main__':
@@ -42,10 +42,10 @@ if __name__ == '__main__':
             #bbox = left,bottom,right,top   
             stream.filter(track=['#Seattle', 'Seattle'], locations=[-122.53, 47.46, -122.20,47.74])
 
-        except Exception, e:
-            print "Error. Restarting Stream.... Error: "
-            print e.__doc__
-            print e.message
+        except Exception as e:
+            print("Error. Restarting Stream.... Error: ")
+            print(e.__doc__)
+            print(e.message)
 
 
     

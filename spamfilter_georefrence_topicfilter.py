@@ -90,7 +90,7 @@ class Filter_OutSpam_ByTopics_ByPopularity():
         tweetsByTopic = df.loc[ df['topic'] == 1]
         filterNumber = len(tweetsByTopic)
         Filter_OutSpam_ByTopics_ByPopularity.number_filteredTopic = len(tweetsByTopic)
-        print("Filter by Topic: {0} , {1:10.1f}%".format( filterNumber, (100 * float(filterNumber) / float( self.number_of_tweets))))
+        print(("Filter by Topic: {0} , {1:10.1f}%".format( filterNumber, (100 * float(filterNumber) / float( self.number_of_tweets)))))
         return tweetsByTopic
     
     #Tag users that Could be Spamers
@@ -155,13 +155,13 @@ class Sentiment():
         r1 = self.KeepCoordinatesOnly(self.data)
         r2 = self.MapTweetLocations( r1, self.latitude, self.longitude, output=r"C:\Users\Carrie\Documents\Python Scripts\Twitter\Map.html")
         self.number_of_tweets = 999
-        print(self.number_of_tweets)
+        print((self.number_of_tweets))
         return r2
 
     def MapAggregatedTweets(self):
         r1 = self.KeepCoordinatesOnly(self.data)
         r1.loc[:, 'neighborhood']  = self.AggregateGeographicLocation(r1)
-        print ("Neighborhoods identified : {0},  Number of Tweets with Neighborhoods Identified {1}".format( len( r1['neighborhood'].unique()), len( r1['neighborhood'] )))
+        print(("Neighborhoods identified : {0},  Number of Tweets with Neighborhoods Identified {1}".format( len( r1['neighborhood'].unique()), len( r1['neighborhood'] ))))
         r2 = self.MapTweetLocations( r1, self.latitude, self.longitude, output=r"C:\Users\Carrie\Documents\Python Scripts\Twitter\Map.html")
         return r2
             
@@ -206,7 +206,7 @@ class Sentiment():
             except Exception as ex:
                 errors += 1
                 message = (type(ex).__name__, ex.args)
-                log = open("C:\Users\Carrie\Documents\Python Scripts\Twitter\MapError.txt","w")
+                log = open("C:\\Users\Carrie\Documents\Python Scripts\Twitter\MapError.txt","w")
                 log.write("----------------------------" + "\n")
                 log.write("@" + row['screen_name'] + "\n")
                 log.write("Coordinates: " +  str(row['coordinates']) + "\n")
@@ -244,7 +244,7 @@ class Sentiment():
                 except Exception as ex:
                     errors += 1
                     message = (type(ex).__name__, ex.args)
-                    log = open("C:\Users\Carrie\Documents\Python Scripts\Twitter\GeoRefError.txt","w")
+                    log = open("C:\\Users\Carrie\Documents\Python Scripts\Twitter\GeoRefError.txt","w")
                     log.write("----------------------------" + "\n")
                     log.write( str(feature['properties']['name']) + "\n")
                     log.write("Coordinates: " +  str(row['coordinates']) + "\n")
@@ -272,4 +272,4 @@ class Sentiment():
 
 #Look at elapsed time of program
 end = time.time()
-print("\n" + "elapsed time:" + str(end - start))
+print(("\n" + "elapsed time:" + str(end - start)))
