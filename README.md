@@ -15,7 +15,7 @@ Check out the Example_call_sentiment_analysis.py which shows how to parse the tw
 You will need to get your own access_token, access_token_secret, consumer_key, consumer_secret.  Visit https://apps.twitter.com/ to set up your own app for free.  Update the twitter_streaming.py when you get these.
 
 #Sentiment API
-The sentiment analysis is done with Indicio API.  You will need to get your own API key. Sign up at https://indico.io/pay-per-call.  You get 10K calls for free. 
+The sentiment analysis is done with Indicio API.  You will need to get your own API key. Sign up at https://indico.io/pay-per-call.  You get 10 K calls for free. 
 
 
 #Configurations:
