@@ -9,3 +9,4 @@ try:
 except ImportError:
 	import os
 	os.system("conda install -c  conda-forge shapely=1.5.17")
+	print("Go to http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely and download the wheel that matches your system then pip install .whl in the correct directory")

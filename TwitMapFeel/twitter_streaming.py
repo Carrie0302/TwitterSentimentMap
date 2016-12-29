@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import multiprocessing
 import time
-
+import sys
 
 #Variables that contains the user credentials to access Twitter API 
 access_token = "253230846-ugildge11UXCAFv37eyevKi24aCRc4YYkqnbeW4c"
@@ -15,6 +15,8 @@ access_token_secret = "0vHm2nGZtP9Bw9kQUzoamC31j2mMCOIrLv4F6Z7hdHEuN"
 consumer_key = "n7ZqpZaDYOb6e0vXF8fGJWFOg"
 consumer_secret = "WPAHRDDRdpkdaSiydvfOLXSTp06mArnPEE8Z7Pu5I8IOQcx934"
 
+print("Enter the output file :{0}".format( sys.argv[0]) )
+output_file = str(sys.argv[0])
 
 #This is a basic listener that just prints received tweets to stdout.
 class StdOutListener(StreamListener):
@@ -41,6 +43,8 @@ if __name__ == '__main__':
             #Twitter checks if coordatinates matches your locations filter. If that fails Twitter checks place.
             #bbox = left,bottom,right,top   
             stream.filter(track=['#Seattle', 'Seattle'], locations=[-122.53, 47.46, -122.20,47.74])
+            # f = open('output.txt', 'wb')
+            # f.write(s)
 
         except Exception as e:
             print("Error. Restarting Stream.... Error: ")

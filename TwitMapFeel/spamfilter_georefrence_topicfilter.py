@@ -25,10 +25,8 @@ pd.set_option('display.max_rows', 10)  #change this to the number of rows in the
 
 #Set up sentiment API
 indicoio.config.api_key = 'ec3bc151fe4fbb46606694fb02f2ea90'
-tweets_data_path = r"C:\Users\Carrie\Documents\Python Scripts\Twitter\clean_dataSeattle_2.json"
 
 class Filter_OutSpam_ByTopics_ByPopularity():
-    
     number_After_Filtered_Spam = 0
     number_Tweets_English = 0
     number_Unique_Users = 0
@@ -39,11 +37,13 @@ class Filter_OutSpam_ByTopics_ByPopularity():
     dates = []
     
     def __init__(self, tweets_data_path, most_popular=False, filter_by_list=False):
+        print (tweets_data_path)
         self.most_popular = most_popular
         self.filter_by_list = filter_by_list
         self.tweets_data_path = tweets_data_path
         self.tweets = pd.read_json(self.tweets_data_path)
         self.number_of_tweets = len(self.tweets)
+        
     
     #Manage which filters to apply based on the attributes passed
     def ReturnData(self):
@@ -55,7 +55,7 @@ class Filter_OutSpam_ByTopics_ByPopularity():
             unique_users_most_popular = r4.groupby('user_name', as_index=False)
             Filter_OutSpam_ByTopics_ByPopularity.number_MostPop = len(r4)
             Filter_OutSpam_ByTopics_ByPopularity.number_Users_MostPop = len(unique_users_most_popular)
-            #r3.to_excel("C:\Users\Carrie\Documents\Python Scripts\Twitter\AfterFilter_10_24_2016.xlsx")
+            #r3.to_excel("AfterFilter_10_24_2016.xlsx")
             return r3
             
         elif self.most_popular == False and self.filter_by_list == False:
@@ -114,7 +114,7 @@ class Filter_OutSpam_ByTopics_ByPopularity():
         
         # Filter Out Spam
         df1 = df.loc[ df['user_name'].isin( Spam_Users ) == False ]
-        #df1.to_excel("C:\Users\Carrie\Documents\Python Scripts\Twitter\AfterFilter_10_24_2016.xlsx")
+        #df1.to_excel("AfterFilter_10_24_2016.xlsx")
         Filter_OutSpam_ByTopics_ByPopularity.number_After_Filtered_Spam = len(df1)
         Filter_OutSpam_ByTopics_ByPopularity.dates = sorted(df1.date.unique())
         return df1
@@ -126,17 +126,18 @@ class Filter_OutSpam_ByTopics_ByPopularity():
         percent_after_spam = (100 * float(num_after_spam) / float(self.number_of_tweets))
         num_Users = Filter_OutSpam_ByTopics_ByPopularity.number_Unique_Users
         num_Spammers = Filter_OutSpam_ByTopics_ByPopularity.number_Spam_Users
-        percent_Spammers = (100 * float(num_Spammers) / float(num_Users))
-        
+ 
+
         return """\tNumber of Tweets to be Processed: {0} 
         \n\tTweets in English: {1} , {2:10.1f}%
         \n\tRemaining afer Spam filter: {3} , {4:10.1f}%
         \n\tUnique Users: {5}
-        \n\tSpammers: {6} , {7:10.1f}%
-        \n\tDates: {8}
-        \n\tFiltered by Most Popular: {9} \tNumber of Most Popular Users: {10}
-        \n\tFiltered by Topic: {11} \tNumber of Tweets Filtered by Topic: {12}
-        """.format( len(self.tweets), num_tweets, percent_tweets_eng, num_after_spam, percent_after_spam, num_Users, num_Spammers, percent_Spammers, Filter_OutSpam_ByTopics_ByPopularity.dates, self.most_popular, Filter_OutSpam_ByTopics_ByPopularity.number_Users_MostPop, self.filter_by_list, Filter_OutSpam_ByTopics_ByPopularity.number_filteredTopic)
+        \n\tSpammers: {6} (The spam filter works better on a large # of tweets.  You can also adjust the spam filter setting)
+        \n\tDates: {7}
+        \n\tFiltered by Most Popular: {8} \tNumber of Most Popular Users: {9}
+        \n\tFiltered by Topic: {10} \tNumber of Tweets Filtered by Topic: {11}
+        """.format( len(self.tweets), num_tweets, percent_tweets_eng, num_after_spam, percent_after_spam, num_Users, num_Spammers, Filter_OutSpam_ByTopics_ByPopularity.dates, self.most_popular, Filter_OutSpam_ByTopics_ByPopularity.number_Users_MostPop, self.filter_by_list, Filter_OutSpam_ByTopics_ByPopularity.number_filteredTopic)
+
 
     #Return Most Popular
     def ReturnMostPopular(self, df, top_Number):
@@ -144,26 +145,29 @@ class Filter_OutSpam_ByTopics_ByPopularity():
          
 
 class Sentiment():
-    def __init__(self, data, latitude=47.616614, longitude=-122.334540, neighborhoods_geo= r"C:\Users\Carrie\Documents\Python Scripts\Twitter\neighborhoodsSeattlegeojson.json"):
+    number_with_Coordinates = 0
+
+    def __init__(self, data, latitude=47.616614, longitude=-122.334540, neighborhoods_geo= r"neighborhoodsSeattlegeojson.json"):
         self.data = data
         self.latitude = latitude
         self.longitude = longitude
         self.number_of_tweets = len(data)
         self.neighborhoods_geo = neighborhoods_geo
 
-    def MapIndividualTweets(self):
+    def MapIndividualTweets(self, output=r"Map_IndividualTweets.html"):
         r1 = self.KeepCoordinatesOnly(self.data)
-        r2 = self.MapTweetLocations( r1, self.latitude, self.longitude, output=r"C:\Users\Carrie\Documents\Python Scripts\Twitter\Map.html")
-        self.number_of_tweets = 999
-        print((self.number_of_tweets))
+        r2 = self.MapTweetLocations( r1, self.latitude, self.longitude, output)
         return r2
 
-    def MapAggregatedTweets(self):
+    def MapAggregatedTweets(self, output=r"Map_AggregatedTweets.html"):
         r1 = self.KeepCoordinatesOnly(self.data)
-        r1.loc[:, 'neighborhood']  = self.AggregateGeographicLocation(r1)
-        print(("Neighborhoods identified : {0},  Number of Tweets with Neighborhoods Identified {1}".format( len( r1['neighborhood'].unique()), len( r1['neighborhood'] ))))
-        r2 = self.MapTweetLocations( r1, self.latitude, self.longitude, output=r"C:\Users\Carrie\Documents\Python Scripts\Twitter\Map.html")
-        return r2
+        #r1.loc[:, 'neighborhood']  = self.AggregateGeographicLocation(r1)
+        r2 = self.NeighborhoodSentiment(r1)
+        #save sentiment by neighborhood
+        r2.to_excel('Sentiment_by_Neighborhood.xlsx')
+        
+        r3 = self.NeighborhoodMap( r2, self.latitude, self.longitude, output)
+        return r3
             
     def SentimentOnText(self, data):  
         #Values greater than 0.5 indicate positive sentiment, while values less than 0.5 indicate negative sentiment.
@@ -190,8 +194,8 @@ class Sentiment():
     #Filter out any tweets without coordinates
     def KeepCoordinatesOnly(self, df):
         MapLatLong = df.dropna(subset = ['coordinates'])
-        #NumberwithCoordinates = len(MapLatLong)
-        #print("Tweets with coordinates for mapping: {0}, {1:10.1f}%".format(NumberwithCoordinates, (100 * float(NumberwithCoordinates) / float(self.number_of_tweets)) ))
+        number_with_Coordinates = len(MapLatLong)
+        print("Tweets with coordinates for mapping: {0}".format(number_with_Coordinates))
         return MapLatLong
 
     #Map those Tweets with Coordinates
@@ -206,7 +210,7 @@ class Sentiment():
             except Exception as ex:
                 errors += 1
                 message = (type(ex).__name__, ex.args)
-                log = open("C:\\Users\Carrie\Documents\Python Scripts\Twitter\MapError.txt","w")
+                log = open("MapError.txt","w")
                 log.write("----------------------------" + "\n")
                 log.write("@" + row['screen_name'] + "\n")
                 log.write("Coordinates: " +  str(row['coordinates']) + "\n")
@@ -214,6 +218,49 @@ class Sentiment():
                 log.write("Count:" + errors + "\n")
                 log.close()
                 print(message)
+        mapLeafletPython.save(output)
+
+    #Map neighborhoods
+    def NeighborhoodMap(self, df, latitude, longitude, output="Map_New2.html"):
+        mapLeafletPython = folium.Map(location=[latitude, longitude], zoom_start=12, tiles='Stamen Toner')
+
+        neighborhoods_geo = self.neighborhoods_geo
+        sentimentbyN= df.reset_index()
+        sentimentbyN = sentimentbyN[['neighborhood', 'sentiment']]    #= sentimentbyN.loc[ sentimentbyN['neighborhood'] == None]
+
+        NwithData = sentimentbyN['neighborhood'].tolist()
+        print(len(  NwithData ))
+
+        checkDataAvailable = []
+        geoN = pd.read_json(neighborhoods_geo)
+        feature = geoN['features']
+        i = 146
+        for f in feature:
+            check = f['properties']['name']
+            
+            if check in NwithData:
+                pass
+            else:
+                print (check)
+                sentimentbyN.loc[i] = [check, 0 ]
+                i+=1
+        print((len(sentimentbyN)))
+  
+        # print("Columns" )
+        # df = df.reset_index()
+        # print(df.columns)
+        # df.columns = ['neighborhood', 'text', 'sentiment']
+        # cleandf = df[['neighborhood', 'sentiment']]
+        # geopath = pd.read_json(self.neighborhoods_geo)
+        # print(geopath['features'])
+
+        mapLeafletPython.choropleth(geo_path=self.neighborhoods_geo,  data=sentimentbyN,
+                    columns=['neighborhood', 'sentiment'],
+                    key_on='feature.properties.name',
+                    fill_color='BuPu', fill_opacity=0.7, line_opacity=0.2,
+                    legend_name='Sentiment Analysis (Scale from 0 to 1)'
+                    ,reset=True)
+                    
         mapLeafletPython.save(output)
 
     #@profile
@@ -244,7 +291,7 @@ class Sentiment():
                 except Exception as ex:
                     errors += 1
                     message = (type(ex).__name__, ex.args)
-                    log = open("C:\\Users\Carrie\Documents\Python Scripts\Twitter\GeoRefError.txt","w")
+                    log = open("GeoRefError.txt","w")
                     log.write("----------------------------" + "\n")
                     log.write( str(feature['properties']['name']) + "\n")
                     log.write("Coordinates: " +  str(row['coordinates']) + "\n")
@@ -258,14 +305,19 @@ class Sentiment():
         return pd.Series((np.array(neighborhoods)), index=df.index)
 
     #@profile
-    #Aggregate twitter text and group by neighborhoods
+    #Aggregate twitter text and group by neighborhoods 
+    #Try to find an accurate geojson for your project that is in the right projection, other wise Topology Excpetions will be thrown
     def NeighborhoodSentiment(self, df):
-        tweets_coordinates = self.KeepCoordinatesOnly(df)
+        tweets_coordinates = df
         del df
         tweets_coordinates.loc[:, 'neighborhood']  = self.AggregateGeographicLocation(tweets_coordinates)
+        #print(("Neighborhoods identified : {0},  Number of Tweets with Neighborhoods Identified {1}".format( len( tweets_coordinates['neighborhood'].unique()), len( tweets_coordinates.dropna(subset = ['neighborhood']) ))))
+
         neighborhood_Tweets = tweets_coordinates[['text', 'neighborhood']].groupby('neighborhood')['text'].apply(lambda x: "%s." % '. '.join(x))
-        del tweets_coordinates    
+ 
         neighborhoodsAgg = pd.DataFrame(neighborhood_Tweets)
+        print(("Neighborhoods identified : {0},  Number of Tweets with Neighborhoods Identified {1}".format( len( tweets_coordinates['neighborhood'].unique()), len( tweets_coordinates.dropna(subset = ['neighborhood']) ))))
+        del tweets_coordinates
         del neighborhood_Tweets
         neighborhoodsAgg['sentiment'] = neighborhoodsAgg['text'].apply(lambda x: indicoio.sentiment(x))
         return neighborhoodsAgg
