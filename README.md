@@ -17,8 +17,7 @@ You will need to get your own access_token, access_token_secret, consumer_key, c
 #Sentiment API
 The sentiment analysis is done with Indicio API.  You will need to get your own API key. Sign up at https://indico.io/pay-per-call.  You get 10 K calls for free. 
 
-
-#Configurations:
+#Install
 pip install the requirements.txt
 the only exception is Shapely, which needs to be downloaded from http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
 and then you can install the .whl with pip
