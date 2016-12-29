@@ -24,7 +24,7 @@ pd.set_option('display.max_colwidth', 500)
 pd.set_option('display.max_rows', 10)  #change this to the number of rows in the display
 
 #Set up sentiment API
-indicoio.config.api_key = 'ec3bc151fe4fbb46606694fb02f2ea90'
+indicoio.config.api_key = 'Sign up on indicoio for a key'
 
 class Filter_OutSpam_ByTopics_ByPopularity():
     number_After_Filtered_Spam = 0
@@ -161,7 +161,6 @@ class Sentiment():
 
     def MapAggregatedTweets(self, output=r"Map_AggregatedTweets.html"):
         r1 = self.KeepCoordinatesOnly(self.data)
-        #r1.loc[:, 'neighborhood']  = self.AggregateGeographicLocation(r1)
         r2 = self.NeighborhoodSentiment(r1)
         #save sentiment by neighborhood
         r2.to_excel('Sentiment_by_Neighborhood.xlsx')
@@ -245,14 +244,6 @@ class Sentiment():
                 sentimentbyN.loc[i] = [check, 0 ]
                 i+=1
         print((len(sentimentbyN)))
-  
-        # print("Columns" )
-        # df = df.reset_index()
-        # print(df.columns)
-        # df.columns = ['neighborhood', 'text', 'sentiment']
-        # cleandf = df[['neighborhood', 'sentiment']]
-        # geopath = pd.read_json(self.neighborhoods_geo)
-        # print(geopath['features'])
 
         mapLeafletPython.choropleth(geo_path=self.neighborhoods_geo,  data=sentimentbyN,
                     columns=['neighborhood', 'sentiment'],
